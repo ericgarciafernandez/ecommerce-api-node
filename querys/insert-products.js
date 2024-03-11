@@ -1,12 +1,37 @@
 const connection = require('../db');
 
 // ----- Crear registros -----
-const insertQuery = 'INSERT INTO products (name, description, price, stock) VALUES ?';
+const insertQuery = 'INSERT INTO products (name, description, price, stock, image) VALUES ?';
+
+const products = [
+    { name: 'Cactus', description: 'Pequeña planta suculenta con espinas.', price: 9.99, stock: 50, image: 'https://via.placeholder.com/150' },
+    { name: 'Margaritas', description: 'Flores blancas de jardín con pétalos delicados.', price: 12.99, stock: 40, image: 'https://via.placeholder.com/150' },
+    { name: 'Rosas', description: 'Flores rojas o rosadas con un aroma embriagador.', price: 14.99, stock: 30, image: 'https://via.placeholder.com/150' },
+    { name: 'Lavanda', description: 'Planta aromática con flores moradas.', price: 11.99, stock: 45, image: 'https://via.placeholder.com/150' },
+    { name: 'Orquídea', description: 'Planta exótica con flores grandes y coloridas.', price: 19.99, stock: 25, image: 'https://via.placeholder.com/150' },
+    { name: 'Tulipanes', description: 'Flores bulbosas con una variedad de colores brillantes.', price: 16.99, stock: 35, image: 'https://via.placeholder.com/150' },
+    { name: 'Hortensias', description: 'Plantas de jardín con flores en forma de pompones.', price: 18.99, stock: 28, image: 'https://via.placeholder.com/150' },
+    { name: 'Jazmín', description: 'Planta trepadora con flores blancas muy fragantes.', price: 15.99, stock: 20, image: 'https://via.placeholder.com/150' },
+    { name: 'Lirios', description: 'Flores elegantes y perfumadas en forma de trompeta.', price: 17.99, stock: 22, image: 'https://via.placeholder.com/150' },
+    { name: 'Begonias', description: 'Plantas de interior con hojas decorativas y flores vibrantes.', price: 13.99, stock: 30, image: 'https://via.placeholder.com/150' },
+    { name: 'Peonías', description: 'Flores exuberantes y fragantes en una variedad de colores.', price: 21.99, stock: 18, image: 'https://via.placeholder.com/150' },
+    { name: 'Claveles', description: 'Flores de jardín tradicionales con un aroma dulce.', price: 10.99, stock: 40, image: 'https://via.placeholder.com/150' },
+    { name: 'Crásulas', description: 'Plantas suculentas con hojas redondas y carnudas.', price: 8.99, stock: 55, image: 'https://via.placeholder.com/150' },
+    { name: 'Bambú', description: 'Planta ornamental de rápido crecimiento con tallos delgados y flexibles.', price: 20.99, stock: 15, image: 'https://via.placeholder.com/150' },
+    { name: 'Aloe Vera', description: 'Planta suculenta conocida por sus propiedades medicinales.', price: 9.99, stock: 60, image: 'https://via.placeholder.com/150' },
+    { name: 'Helechos', description: 'Plantas de interior con frondas verdes y exuberantes.', price: 14.99, stock: 25, image: 'https://via.placeholder.com/150' },
+    { name: 'Azaleas', description: 'Plantas de jardín con flores en forma de campana en una variedad de colores.', price: 16.99, stock: 30, image: 'https://via.placeholder.com/150' },
+    { name: 'Suculenta', description: 'Pequeñas plantas suculentas perfectas para interiores.', price: 7.99, stock: 60, image: 'https://via.placeholder.com/150' },
+    { name: 'Bonsái', description: 'Árboles miniaturizados cultivados en macetas pequeñas.', price: 24.99, stock: 15, image: 'https://via.placeholder.com/150' },
+    { name: 'Violetas africanas', description: 'Plantas de interior con flores vibrantes y hojas aterciopeladas.', price: 11.99, stock: 25, image: 'https://via.placeholder.com/150' }
+];
+
 const eachProduct = products.map((el) => [
     el.name,
     el.description,
     el.price,
-    el.stock
+    el.stock,
+    el.image
 ]);
 
 connection.query(insertQuery, [eachProduct], (err, results) => {
@@ -16,26 +41,3 @@ connection.query(insertQuery, [eachProduct], (err, results) => {
     }
     console.log('Productos insertados!');
 });
-
-const products = [
-    { name: 'Camiseta', description: 'Camiseta de algodón', price: 15.99, stock: 100 },
-    { name: 'Pantalón', description: 'Pantalón vaquero', price: 29.99, stock: 50 },
-    { name: 'Zapatos deportivos', description: 'Zapatos deportivos para correr', price: 49.99, stock: 30 },
-    { name: 'Reloj de pulsera', description: 'Reloj analógico con correa de cuero', price: 79.99, stock: 20 },
-    { name: 'Teléfono móvil', description: 'Teléfono inteligente con cámara de alta resolución', price: 299.99, stock: 15 },
-    { name: 'Tablet', description: 'Tablet con pantalla táctil de 10 pulgadas', price: 199.99, stock: 25 },
-    { name: 'Teclado inalámbrico', description: 'Teclado ergonómico con conexión Bluetooth', price: 49.99, stock: 30 },
-    { name: 'Ratón óptico', description: 'Ratón inalámbrico con sensor óptico de precisión', price: 19.99, stock: 40 },
-    { name: 'Auriculares Bluetooth', description: 'Auriculares inalámbricos con cancelación de ruido', price: 79.99, stock: 20 },
-    { name: 'Altavoz portátil', description: 'Altavoz Bluetooth resistente al agua', price: 59.99, stock: 30 },
-    { name: 'Mochila', description: 'Mochila ergonómica con compartimento para portátil', price: 39.99, stock: 50 },
-    { name: 'Cámara digital', description: 'Cámara compacta con zoom óptico de 10x', price: 199.99, stock: 15 },
-    { name: 'Impresora multifunción', description: 'Impresora láser con escáner y copiadora', price: 129.99, stock: 10 },
-    { name: 'Smartwatch', description: 'Reloj inteligente con monitor de actividad física', price: 149.99, stock: 20 },
-    { name: 'Gafas de sol', description: 'Gafas de sol polarizadas con montura de metal', price: 29.99, stock: 40 },
-    { name: 'Portátil', description: 'Portátil con procesador Intel Core i7 y 16GB de RAM', price: 999.99, stock: 10 },
-    { name: 'Monitor de 24 pulgadas', description: 'Monitor LED Full HD con puerto HDMI', price: 149.99, stock: 20 },
-    { name: 'Licuadora', description: 'Licuadora con vaso de vidrio y cuchillas de acero inoxidable', price: 49.99, stock: 30 },
-    { name: 'Silla de oficina', description: 'Silla ergonómica con respaldo ajustable', price: 129.99, stock: 15 },
-    { name: 'Juego de sartenes', description: 'Juego de sartenes antiadherentes de 3 piezas', price: 59.99, stock: 25 }
-];

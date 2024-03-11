@@ -6,12 +6,13 @@ const createTableQuery = `CREATE TABLE IF NOT EXISTS products (
         name VARCHAR(255) NOT NULL,
         description TEXT,
         price DECIMAL(10, 2) NOT NULL,
-        stock INT NOT NULL
+        stock INT NOT NULL,
+        image VARCHAR(255)
     )`;
 
 connection.query(createTableQuery, (err, results) => {
     if (err) {
-        console.log('Error al crear la tabla');
+        console.log('Error al crear la tabla', err.stack);
         return;
     }
     console.log('Tabla creada!');
