@@ -7,8 +7,10 @@ const createTableQuery = `CREATE TABLE IF NOT EXISTS products (
         description TEXT,
         price DECIMAL(10, 2) NOT NULL,
         stock INT NOT NULL,
-        image VARCHAR(255)
+        image VARCHAR(255),
+        category ENUM('Interior', 'Exterior', 'Jardín', 'Hierbas')
     )`;
+
 
 connection.query(createTableQuery, (err, results) => {
     if (err) {
