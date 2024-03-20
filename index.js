@@ -35,6 +35,18 @@ const getSpecificProduct = (id, callback) => {
     });
 }
 
+const getCategory = (category, callback) => {
+    const selectQuery = 'SELECT * FROM products WHERE category = ?';
+    connection.query(selectQuery, category, (err, results) => {
+        if (err) {
+            console.error('Error al ejecutar la consulta SELECT: ' + err);
+            callback(err, null);
+            return;
+        }
+        callback(null, results);
+    });
+}
+
 const setProduct = (id, data, callback) => {
     const updateQuery = 'UPDATE products SET ? WHERE id = ?';
 
@@ -49,7 +61,7 @@ const setProduct = (id, data, callback) => {
 }
 
 // Rutas
-app.get('/productos', (request, response) => {
+app.get('/products', (request, response) => {
     getAllProducts((err, results) => {
         if (err) {
             response.status(500).send('Error en el servidor');
@@ -59,7 +71,7 @@ app.get('/productos', (request, response) => {
     });
 });
 
-app.route('/productos/:id')
+app.route('/products/:id')
     .get(function (request, response) {
         const id = request.params.id;
         console.log(request.body);
@@ -83,6 +95,17 @@ app.route('/productos/:id')
         });
     });
 ;
+
+app.get('/categories/:category', (request, response) => {
+    const category = request.params.category;
+    getCategory(category, (err, results) => {
+        if (err) {
+            response.status(500).send('Error en el servidor');
+            return;
+        }
+        response.json(results);
+    });
+});
 
 app.get('/', (request, response) => {
     response.send('Home');
