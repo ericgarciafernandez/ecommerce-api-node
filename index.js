@@ -96,7 +96,7 @@ app.route('/products/:id')
     });
 ;
 
-app.get('/categories/:category', (request, response) => {
+app.get('/categorias/:category', (request, response) => {
     const category = request.params.category;
     getCategory(category, (err, results) => {
         if (err) {
