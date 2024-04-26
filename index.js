@@ -1,14 +1,19 @@
 const express = require('express');
-var cors = require('cors');
+const cors = require('cors');
+const Stripe = require('stripe');
 const app = express();
 const PORT = 3001;
 const connection = require('./db.js');
+require('dotenv').config();
 
 // Middleware para manejar JSON
 app.use(express.json());
 
 // Uso de cors
 app.use(cors());
+
+// Declaramos stripe
+const stripe = new Stripe(process.env.STRIPE_PRIVATE_KEY);
 
 const getAllProducts = (callback) => {
     const selectQuery = 'SELECT * FROM products';
@@ -47,19 +52,6 @@ const getCategory = (category, callback) => {
     });
 }
 
-const setProduct = (id, data, callback) => {
-    const updateQuery = 'UPDATE products SET ? WHERE id = ?';
-
-    connection.query(updateQuery, /* Parámetros que vienen de request.body */(err, results) => {
-        if (err) {
-            console.error('Error al ejecutar la consulta UPDATE: ' + err);
-            callback(err, null);
-            return;
-        }
-        callback(null, results);
-    });
-}
-
 // Rutas
 app.get('/products', (request, response) => {
     getAllProducts((err, results) => {
@@ -71,30 +63,16 @@ app.get('/products', (request, response) => {
     });
 });
 
-app.route('/products/:id')
-    .get(function (request, response) {
-        const id = request.params.id;
-        console.log(request.body);
-        getSpecificProduct(id, (err, results) => {
-            if (err) {
-                response.status(500).send('Error en el servidor');
-                return;
-            }
-            response.json(results);
-        });
-    })
-    .post(function (request, response) {
-        const id = request.params.id;
-        const data = request.body;
-        setProduct(id, data, (err, results) => {
-            if (err) {
-                response.status(500).send('Error en el servidor');
-                return;
-            }
-            response.json(results);
-        });
+app.get('/products/:id', (request, response) => {
+    const id = request.params.id;
+    getSpecificProduct(id, (err, results) => {
+        if (err) {
+            response.status(500).send('Error en el servidor');
+            return;
+        }
+        response.json(results);
     });
-;
+});
 
 app.get('/categorias/:category', (request, response) => {
     const category = request.params.category;
@@ -105,6 +83,21 @@ app.get('/categorias/:category', (request, response) => {
         }
         response.json(results);
     });
+});
+
+app.post('/api/checkout', async (request, response) => {
+    try {
+        const { id, amount } = request.body;
+        const payment = await stripe.paymentIntents.create({
+            payment_method: id,
+            amount,
+            currency: "USD",
+            description: "",
+        });
+        response.send({ message: "Successful payment" });
+    } catch (error) {
+        response.json({ message: error.raw.message });
+    }
 });
 
 app.get('/', (request, response) => {
