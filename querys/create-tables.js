@@ -12,7 +12,7 @@ const createTableQuery = `CREATE TABLE IF NOT EXISTS products (
     )`;
 
 
-connection.query(createTableQuery, (err, results) => {
+connection.query(createTableQuery, (err) => {
     if (err) {
         console.log('Error al crear la tabla', err.stack);
         return;
