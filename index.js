@@ -18,46 +18,40 @@ const stripe = new Stripe(process.env.STRIPE_PRIVATE_KEY);
 async function getAllProducts() {
     const selectQuery = 'SELECT * FROM products';
 
-    return new Promise((resolve, reject) => {
-        connection.query(selectQuery, (err, results) => {
-            if (err) {
-                console.error('Error al ejecutar la consulta SELECT: ' + err);
-                reject(err);
-                return;
-            }
-            resolve(results);
-        });
+    return await connection.query(selectQuery, (err, results) => {
+        if (err) {
+            console.error('Error al ejecutar la consulta SELECT: ' + err);
+            reject(err);
+            return;
+        }
+        resolve(results);
     });
 }
+
 
 async function getSpecificProduct(id) {
     const selectQuery = 'SELECT * FROM products WHERE id = ' + id;
 
-    return new Promise((resolve, reject) => {
-        connection.query(selectQuery, (err, results) => {
-            if (err) {
-                console.error('Error al ejecutar la consulta SELECT: ' + err);
-                reject(err);
-                return;
-            }
-            resolve(results);
-        });
+    return await connection.query(selectQuery, (err, results) => {
+        if (err) {
+            console.error('Error al ejecutar la consulta SELECT: ' + err);
+            reject(err);
+            return;
+        }
+        resolve(results);
     });
 }
 
 async function getCategory(category) {
     const selectQuery = 'SELECT * FROM products WHERE category = ?';
-    return new Promise((resolve, reject) => {
-        connection.query(selectQuery, category, (err, results) => {
-            if (err) {
-                console.error('Error al ejecutar la consulta SELECT: ' + err);
-                reject(err);
-                return;
-            }
-            resolve(results);
-        });
+    return await connection.query(selectQuery, category, (err, results) => {
+        if (err) {
+            console.error('Error al ejecutar la consulta SELECT: ' + err);
+            reject(err);
+            return;
+        }
+        resolve(results);
     });
-
 }
 
 // Rutas
@@ -93,7 +87,7 @@ app.get('/categorias/:category', async function (request, response) {
 app.post('/api/checkout', async function (request, response) {
     try {
         const { id, amount } = request.body;
-        const payment = await stripe.paymentIntents.create({
+        await stripe.paymentIntents.create({
             payment_method: id,
             amount,
             currency: "USD",
@@ -105,7 +99,7 @@ app.post('/api/checkout', async function (request, response) {
     }
 });
 
-app.get('/', function (request, response) {
+app.get('/', function (response) {
     response.send('Home');
 });
 
