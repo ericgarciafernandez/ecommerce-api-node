@@ -15,77 +15,82 @@ app.use(cors());
 // Declaramos stripe
 const stripe = new Stripe(process.env.STRIPE_PRIVATE_KEY);
 
-const getAllProducts = (callback) => {
+async function getAllProducts() {
     const selectQuery = 'SELECT * FROM products';
 
-    connection.query(selectQuery, (err, results) => {
-        if (err) {
-            console.error('Error al ejecutar la consulta SELECT: ' + err);
-            callback(err, null);
-            return;
-        }
-        callback(null, results);
+    return new Promise((resolve, reject) => {
+        connection.query(selectQuery, (err, results) => {
+            if (err) {
+                console.error('Error al ejecutar la consulta SELECT: ' + err);
+                reject(err);
+                return;
+            }
+            resolve(results);
+        });
     });
 }
 
-const getSpecificProduct = (id, callback) => {
+async function getSpecificProduct(id) {
     const selectQuery = 'SELECT * FROM products WHERE id = ' + id;
-    connection.query(selectQuery, (err, results) => {
-        if (err) {
-            console.error('Error al ejecutar la consulta SELECT: ' + err);
-            callback(err, null);
-            return;
-        }
-        callback(null, results);
+
+    return new Promise((resolve, reject) => {
+        connection.query(selectQuery, (err, results) => {
+            if (err) {
+                console.error('Error al ejecutar la consulta SELECT: ' + err);
+                reject(err);
+                return;
+            }
+            resolve(results);
+        });
     });
 }
 
-const getCategory = (category, callback) => {
+async function getCategory(category) {
     const selectQuery = 'SELECT * FROM products WHERE category = ?';
-    connection.query(selectQuery, category, (err, results) => {
-        if (err) {
-            console.error('Error al ejecutar la consulta SELECT: ' + err);
-            callback(err, null);
-            return;
-        }
-        callback(null, results);
+    return new Promise((resolve, reject) => {
+        connection.query(selectQuery, category, (err, results) => {
+            if (err) {
+                console.error('Error al ejecutar la consulta SELECT: ' + err);
+                reject(err);
+                return;
+            }
+            resolve(results);
+        });
     });
+
 }
 
 // Rutas
-app.get('/products', (request, response) => {
-    getAllProducts((err, results) => {
-        if (err) {
-            response.status(500).send('Error en el servidor');
-            return;
-        }
-        response.json(results);
-    });
+app.get('/products', async function (request, response) {
+    try {
+        const result = await getAllProducts();
+        response.json(result);
+    } catch (error) {
+        response.status(500).send('Error en el servidor');
+    }
 });
 
-app.get('/products/:id', (request, response) => {
-    const id = request.params.id;
-    getSpecificProduct(id, (err, results) => {
-        if (err) {
-            response.status(500).send('Error en el servidor');
-            return;
-        }
-        response.json(results);
-    });
+app.get('/products/:id', async function (request, response) {
+    try {
+        const id = request.params.id;
+        const result = await getSpecificProduct(id);
+        response.json(result);
+    } catch (error) {
+        response.status(500).send('Error en el servidor');
+    }
 });
 
-app.get('/categorias/:category', (request, response) => {
-    const category = request.params.category;
-    getCategory(category, (err, results) => {
-        if (err) {
-            response.status(500).send('Error en el servidor');
-            return;
-        }
-        response.json(results);
-    });
+app.get('/categorias/:category', async function (request, response) {
+    try {
+        const category = request.params.category;
+        const result = await getCategory(category);
+        response.json(result)
+    } catch (error) {
+        response.status(500).send('Error en el servidor');
+    }
 });
 
-app.post('/api/checkout', async (request, response) => {
+app.post('/api/checkout', async function (request, response) {
     try {
         const { id, amount } = request.body;
         const payment = await stripe.paymentIntents.create({
@@ -100,7 +105,7 @@ app.post('/api/checkout', async (request, response) => {
     }
 });
 
-app.get('/', (request, response) => {
+app.get('/', function (request, response) {
     response.send('Home');
 });
 
