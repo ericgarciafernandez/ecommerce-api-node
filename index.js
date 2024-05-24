@@ -92,7 +92,7 @@ app.get("/", function (request, response) {
   response.send("Home");
 });
 
-app.get("/create-checkout-session", async (request, response) => {
+app.post("/create-checkout-session", async (request, response) => {
   const session = await stripe.checkout.sessions.create({
     line_items: [
       {
@@ -105,11 +105,11 @@ app.get("/create-checkout-session", async (request, response) => {
           unit_amount: 1000, //10
         },
         quantity: 2,
-      }, 
+      },
     ],
     mode: "payment",
-    success_url: "http://localhost:4000/success",
-    cancel_url: "http://localhost:4000/cancel",
+    success_url: "http://localhost:3001/success",
+    cancel_url: "http://localhost:3001/cancel",
   });
   return response.json(session);
 });
