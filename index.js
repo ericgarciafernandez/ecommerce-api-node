@@ -93,24 +93,31 @@ app.get("/", function (request, response) {
 });
 
 app.post("/create-checkout-session", async (request, response) => {
-  const session = await stripe.checkout.sessions.create({
-    line_items: [
-      {
-        price_data: {
-          product_data: {
-            name: "test",
-            description: "test description",
-          },
-          currency: "usd",
-          unit_amount: 1000, //10
-        },
-        quantity: 2,
+  const cart = request.body;
+
+  // Mapeamos el carrito para configurar los line_items para Stripe
+  const line_items = cart.map((item) => ({
+    price_data: {
+      currency: "eur",
+      product_data: {
+        name: item.name,
+        description: item.description, // Asegúrate de que tu objeto `item` tenga una propiedad `description`
       },
-    ],
+      unit_amount: Math.round(item.price * 100), // Stripe trabaja con centavos, así que multiplicamos por 100
+    },
+    quantity: 1, // Asegúrate de que tu objeto `item` tenga una propiedad `quantity`
+  }));
+
+  console.log(line_items);
+
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ["card"],
+    line_items: line_items,
     mode: "payment",
     success_url: "http://localhost:3001/success",
     cancel_url: "http://localhost:3001/cancel",
   });
+
   return response.json(session);
 });
 
