@@ -105,7 +105,7 @@ app.post("/create-checkout-session", async (request, response) => {
       },
       unit_amount: Math.round(item.price * 100), // Stripe trabaja con centavos, así que multiplicamos por 100
     },
-    quantity: 1, // Asegúrate de que tu objeto `item` tenga una propiedad `quantity`
+    quantity: item.quantity, // Asegúrate de que tu objeto `item` tenga una propiedad `quantity`
   }));
 
   console.log(line_items);
