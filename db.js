@@ -1,11 +1,11 @@
-const mysql = require('mysql');
+const mysql = require("mysql");
 
 // Configuración de la conexión a la base de datos
 const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '429M7e$6+.F[',
-    database: 'shop'
+  host: "ep-delicate-hat-a289e458-pooler.eu-central-1.aws.neon.tech",
+  user: "default",
+  password: "qRQa6XP4VIDr",
+  database: "verceldb",
 });
 
 module.exports = connection;
