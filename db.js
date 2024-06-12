@@ -1,23 +1,18 @@
-const mysql = require("mysql");
+const { Client } = require("pg");
+require("dotenv").config();
 
 // Configuración de la conexión a la base de datos
-const connection = mysql.createConnection({
-  host: "ep-delicate-hat-a289e458-pooler.eu-central-1.aws.neon.tech",
-  user: "default",
-  password: "qRQa6XP4VIDr",
-  database: "verceldb",
+const client = new Client({
+  connectionString: process.env.POSTGRES_URL, // o cualquier otra variable de entorno que contenga la URL de conexión
+  ssl: {
+    rejectUnauthorized: false, // Esto puede ser necesario dependiendo de la configuración de tu base de datos
+  },
 });
 
-module.exports = connection;
+// Conectar a la base de datos PostgreSQL
+client
+  .connect()
+  .then(() => console.log("Conexión exitosa a PostgreSQL"))
+  .catch((err) => console.error("Error al conectar con PostgreSQL:", err));
 
-// ----- Conectar a la base de datos MySQL -----
-
-// connection.connect((err) => {
-//     if (err) {
-//         console.error('Error al conectar con MySQL: ' + err);
-//         return;
-//     }
-//     console.log('Conexión con MySQL');
-
-//     connection.end();
-// });
+module.exports = client;
