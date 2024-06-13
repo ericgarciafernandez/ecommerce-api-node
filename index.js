@@ -24,7 +24,7 @@ async function getAllProducts() {
         reject(err);
         return;
       }
-      resolve(results);
+      resolve(results.rows);
     });
   });
 }
@@ -39,7 +39,7 @@ async function getSpecificProduct(id) {
         reject(err);
         return;
       }
-      resolve(results);
+      resolve(results.rows);
     });
   });
 }
@@ -53,7 +53,7 @@ async function getCategory(category) {
         reject(err);
         return;
       }
-      resolve(results);
+      resolve(results.rows);
     });
   });
 }
