@@ -31,7 +31,6 @@ async function getAllProducts() {
 
 async function getSpecificProduct(id) {
   const selectQuery = "SELECT * FROM products WHERE id = " + id;
-
   return new Promise((resolve, reject) => {
     connection.query(selectQuery, (err, results) => {
       if (err) {
@@ -45,9 +44,11 @@ async function getSpecificProduct(id) {
 }
 
 async function getCategory(category) {
-  const selectQuery = "SELECT * FROM products WHERE category = ?";
+  const selectQuery =
+    "SELECT * FROM products WHERE category = '" + category + "'";
+  console.log(selectQuery);
   return new Promise((resolve, reject) => {
-    connection.query(selectQuery, category, (err, results) => {
+    connection.query(selectQuery, (err, results) => {
       if (err) {
         console.error("Error al ejecutar la consulta SELECT: " + err);
         reject(err);
