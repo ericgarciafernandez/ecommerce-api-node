@@ -1,4 +1,4 @@
-node_modules
+node_modules/
 
 # Ignore logs and temporary files
 *.log
