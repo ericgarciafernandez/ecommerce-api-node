@@ -10,7 +10,7 @@ const products = [
     name: "Cactus 20 cm en maceta decorativa blanca",
     description: "Descubre la elegancia natural con nuestro cactus de 20 cm en una sofisticada maceta decorativa blanca. Ideal para embellecer cualquier espacio con un toque de frescura y modernidad. ¡Añade un toque de vida a tu hogar u oficina hoy mismo!",
     price: 9.99,
-    image: "../images/rosa.webp",
+    image: "https://img.freepik.com/foto-gratis/detalle-tiro-planta-verde-cactus-pote-sobre-fondo-blanco_23-2148053458.jpg",
     category: "Interior",
   },
   {
